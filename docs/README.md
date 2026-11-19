@@ -5,7 +5,7 @@ Asystent lodówki, przepisów i zakupów. Aplikacja desktopowa w Pythonie z inte
 FridgeManager pilnuje, co masz w lodówce, liczy, czego brakuje do wybranego przepisu, i odejmuje składniki po ugotowaniu. Przykład: kupujesz 1 l mleka, przepis zużywa 200 ml, a aplikacja pokazuje, że zostało 800 ml.
 
 > Projekt zaliczeniowy z programowania obiektowego (Python, testy jednostkowe, CI/CD, wydania `v0.1.0`, `v0.2.0`, `v1.0.0`).
-> 🚧 Dokument rośnie razem z projektem. Fragmenty oznaczone 🚧 trzeba uzupełnić lub usunąć przed wydaniem `v1.0.0`.
+> Dokument rośnie razem z projektem. Fragmenty oznaczone 🚧 trzeba uzupełnić lub usunąć przed wydaniem `v1.0.0`.
 
 ## Spis treści
 
@@ -381,11 +381,10 @@ Każde użycie modelu językowego (kod, testy, dokumentacja, konfiguracja) jest 
 | Plik / fragment | Narzędzie | Do czego użyto i jak zweryfikowano |
 | :--- | :--- | :--- |
 | 🚧 `src/fridge_manager/domain/fridge.py`, `Fridge.consume()` *(przykład, zastąpić prawdziwymi wpisami)* | Claude | wygenerowany szkielet; zmieniono obsługę zerowej ilości, dopisano 4 testy brzegowe ręcznie |
-| 🚧 `docs/PRZEWODNIK_DEWELOPERA.md`, `README.md` *(przykład)* | Claude | wygenerowany szkic dokumentacji; poprawiono nazwy klas i ścieżki zgodnie z kodem |
+| 🚧 `docs/README.md` *(przykład)* | Claude | wygenerowany szkic dokumentacji; poprawiono nazwy klas i ścieżki zgodnie z kodem |
 
 ## Autorzy
 
-- 🚧 Imię Nazwisko ([@login-github](https://github.com/login-github))
-- 🚧 Imię Nazwisko ([@login-github](https://github.com/login-github))
+- Jan Habdas (https://github.com/mryanstein)
+- Małgorzata Hycnar (https://github.com/mhycnar)
 
-Wymagania projektu od prowadzącego: [docs/WYMAGANIA_PROJEKTU.md](docs/WYMAGANIA_PROJEKTU.md). Przewodnik dla zespołu: [docs/PRZEWODNIK_DEWELOPERA.md](docs/PRZEWODNIK_DEWELOPERA.md).
