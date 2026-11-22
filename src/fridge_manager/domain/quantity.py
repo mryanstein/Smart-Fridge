@@ -1,7 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 from enum import Enum
+from .errors import IncompatibleUnitError, InvalidQuantityError
 
 class Kind(Enum):
     MASS = "masa"
@@ -17,15 +15,30 @@ class Unit(Enum):
 
     PSC = (Kind.COUT, 1)
 
-    def __init__(self, kind_, factor_):
-        self.kind = kind_                   #KIND.MASS
-        self.factor = factor_               #1000
+    def __init__(self, kind, factor):
+        self._kind = kind                   #KIND.MASS
+        self._factor = factor               #1000
+
+    @property
+    def kind(self) -> Kind:
+        return self._kind
+
+    @property
+    def factor(self) -> float:
+        return self._factor
 
     def convert(self, amount: float, target: Unit) -> float:
-        #dodać wyjątki - amount<0, self.kind != target.kind
-        return amount * self.factor / target.factor
+        if amount < 0:
+            raise InvalidQuantityError("Ilość nie może być ujemna")
 
-#napisać testy
+        if self._kind != target._kind:
+            raise IncompatibleUnitError(
+                f"Nie można przeliczyć {self.name} na {target.name}"
+            )
+
+        return amount * self._factor / target._factor
+
+#TODO napisać testy
 
 
 
