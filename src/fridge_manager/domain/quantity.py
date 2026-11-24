@@ -1,10 +1,10 @@
 from enum import Enum
-from .errors import IncompatibleUnitError, InvalidQuantityError
+from .errors import IncompatibleUnitError, InvalidQuantityError, InvalidUnitError
 
 class Kind(Enum):
     MASS = "masa"
     VOLUME = "objetosc"
-    COUT = "ilosc"
+    COUNT = "ilosc"
 
 class Unit(Enum):
     G = (Kind.MASS, 1)
@@ -13,7 +13,7 @@ class Unit(Enum):
     ML = (Kind.VOLUME, 1)
     L = (Kind.VOLUME, 1000)
 
-    PSC = (Kind.COUT, 1)
+    PCS = (Kind.COUNT, 1)
 
     def __init__(self, kind, factor):
         self._kind = kind                   #KIND.MASS
@@ -27,14 +27,15 @@ class Unit(Enum):
     def factor(self) -> float:
         return self._factor
 
-    def convert(self, amount: float, target: Unit) -> float:
+    def convert(self, amount: float, target: "Unit") -> float:
         if amount < 0:
             raise InvalidQuantityError("Ilość nie może być ujemna")
 
+        if not isinstance(target, Unit):
+            raise InvalidUnitError("Nieprawidłowa jednostka docelowa")
+
         if self._kind != target._kind:
-            raise IncompatibleUnitError(
-                f"Nie można przeliczyć {self.name} na {target.name}"
-            )
+            raise IncompatibleUnitError(f"Nie można przeliczyć {self.name} na {target.name}")
 
         return amount * self._factor / target._factor
 

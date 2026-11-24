@@ -16,3 +16,12 @@ class InvalidQuantityError(DomainError):
 class InsufficientStockError(DomainError):
     """Niewystarczająca ilość produktu w lodówce."""
     pass
+
+class InvalidProductNameError(DomainError):
+    """Nieprawidłowa nazwa produktu."""
+    pass
+
+
+class InvalidUnitError(DomainError):
+    """Nieprawidłowa jednostka produktu."""
+    pass

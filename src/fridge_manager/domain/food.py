@@ -1,14 +1,19 @@
 from abc import ABC, abstractmethod
 from .quantity import Unit, Kind
+from .errors import InvalidProductNameError, InvalidUnitError
 
 
 #potem można rozszerzyć funckjonalność np. kalkulator kalorii
 class FoodItem(ABC):
     def __init__(self, name: str, stock_unit: Unit) -> None:
+        if not isinstance(name, str) or not name.strip():
+            raise InvalidProductNameError("Nieprawidłowa nazwa produktu")
+
+        if not isinstance(stock_unit, Unit):
+            raise InvalidUnitError("Nieprawidłowa jednostka produktu")
+
         self._name = name.strip()
         self._stock_unit = stock_unit   #w jakiej jednostce bazowej przechowywany/kupowany jest produkt np. mleko w l nie ml
-
-    #TODO sprawdzić czy nazwa nie jest pusta, czy napewno stock_unit jest elementen unit (dorobić ValueError, TypeError)
 
     @property
     def name(self) -> str:
@@ -32,14 +37,28 @@ class FoodItem(ABC):
     def to_grams(self, amount: float, unit: Unit) -> float:
         pass
 
-#TODO: trzy klasy pochodne: jak przeliczyć ilość na bazową i na gramy (abstractmethod: to_grams)
 class WeightItem(FoodItem):
-    pass
+    def to_grams(self, amount: float, unit: Unit) -> float:
+        return unit.convert(amount, Unit.G)
 
 
 class VolumeItem(FoodItem):
-    pass
+    def __init__(self, name, stock_unit, grams_per_ml):
+        super().__init__(name, stock_unit)
+        self.grams_per_ml = grams_per_ml
+
+    def to_grams(self, amount: float, unit: Unit) -> float:
+        ml = unit.convert(amount, Unit.ML)
+        return ml * self.grams_per_ml
 
 
 class PieceItem(FoodItem):
-    pass
+    def __init__(self, name, stock_unit, grams_per_piece):
+        super().__init__(name, stock_unit)
+        self.grams_per_piece = grams_per_piece
+
+    def to_grams(self, amount: float, unit: Unit) -> float:
+        pieces = unit.convert(amount, Unit.PCS)
+        return pieces * self.grams_per_piece
+
+#TODO napisać testy
