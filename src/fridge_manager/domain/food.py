@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from .quantity import Unit, Kind
-from .errors import InvalidProductNameError, InvalidUnitError
+from .errors import InvalidProductNameError, InvalidUnitError, IncompatibleUnitError, InvalidQuantityError
 
 
 #potem można rozszerzyć funckjonalność np. kalkulator kalorii
@@ -38,6 +38,13 @@ class FoodItem(ABC):
         pass
 
 class WeightItem(FoodItem):
+    def __init__(self, name, stock_unit):
+        super().__init__(name, stock_unit)
+        if self.kind != Kind.MASS:
+            raise IncompatibleUnitError(
+                "WeightItem wymaga jednostki masy"
+            )
+
     def to_grams(self, amount: float, unit: Unit) -> float:
         return unit.convert(amount, Unit.G)
 
@@ -45,20 +52,36 @@ class WeightItem(FoodItem):
 class VolumeItem(FoodItem):
     def __init__(self, name, stock_unit, grams_per_ml):
         super().__init__(name, stock_unit)
-        self.grams_per_ml = grams_per_ml
+        self._grams_per_ml = grams_per_ml
+        if not isinstance(grams_per_ml, (int, float)) or not grams_per_ml>0:
+            raise InvalidQuantityError(
+                "grams_per_piece musi być dodatnią liczbą"
+            )
+        if self.kind != Kind.VOLUME:
+            raise IncompatibleUnitError(
+                "VolumeItem wymaga jednostki pbjętości"
+            )
 
     def to_grams(self, amount: float, unit: Unit) -> float:
         ml = unit.convert(amount, Unit.ML)
-        return ml * self.grams_per_ml
+        return ml * self._grams_per_ml
 
 
 class PieceItem(FoodItem):
     def __init__(self, name, stock_unit, grams_per_piece):
         super().__init__(name, stock_unit)
-        self.grams_per_piece = grams_per_piece
+        if not isinstance(grams_per_piece, (int, float)) or not grams_per_piece>0:
+            raise InvalidQuantityError(
+                "grams_per_piece musi być dodatnią liczbą"
+            )
+        if self.kind != Kind.COUNT:
+            raise IncompatibleUnitError(
+                "PieceItem wymaga produktu w sztukach"
+            )
+
+        self._grams_per_piece = grams_per_piece
 
     def to_grams(self, amount: float, unit: Unit) -> float:
         pieces = unit.convert(amount, Unit.PCS)
-        return pieces * self.grams_per_piece
+        return pieces * self._grams_per_piece
 
-#TODO napisać testy

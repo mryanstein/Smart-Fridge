@@ -28,8 +28,9 @@ class Unit(Enum):
         return self._factor
 
     def convert(self, amount: float, target: "Unit") -> float:
-        if amount < 0:
-            raise InvalidQuantityError("Ilość nie może być ujemna")
+        if not isinstance(amount, (int, float)) or isinstance(amount, bool) or amount < 0:
+            raise InvalidQuantityError("Amount musi być dodatnią liczbą")
+
 
         if not isinstance(target, Unit):
             raise InvalidUnitError("Nieprawidłowa jednostka docelowa")
@@ -39,7 +40,6 @@ class Unit(Enum):
 
         return amount * self._factor / target._factor
 
-#TODO napisać testy
 
 
 
